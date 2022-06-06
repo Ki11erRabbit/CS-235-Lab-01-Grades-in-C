@@ -8,6 +8,7 @@ typedef struct {
     int* grades;
 } studentData;
 
+
 int main(int argc, char** argv) {
 
     FILE* readFile;
@@ -65,11 +66,9 @@ int main(int argc, char** argv) {
             //printf("%s\n",newBuff);
             numReads++;
         }
-
-
-
         if (numReads == numStudents) break;
     }
+    free(newBuff);
 
     printf("Student Scores:\n");
     for (int i = 0; i < numStudents; i++) {
@@ -82,10 +81,12 @@ int main(int argc, char** argv) {
 
     //Averages Exams
     double avgExamScore[numGrades];
+    int totalSum = 0;
     for (int i = 0; i < numGrades; i++) {
         int sum = 0;
         for (int j = 0; j < numStudents; j++) {
             sum += studentList[j].grades[i];
+            totalSum += studentList[j].grades[i];
         }
         avgExamScore[i] = ((double)sum)/((double)numStudents);
     }
@@ -146,8 +147,51 @@ int main(int argc, char** argv) {
 
     printf("Exam Grades:\n");
     for (int i = 0; i < numGrades; i++) {
-        printf("\tExam %2d   %2d(A)   %2d(B)   %2d(C)   %2d(D)   %2d(E)\n",i,totalLetterGrades[i][0], totalLetterGrades[i][1], totalLetterGrades[i][2],totalLetterGrades[i][3],totalLetterGrades[i][04]);
+        printf("\tExam %2d   %2d(A)   %2d(B)   %2d(C)   %2d(D)   %2d(E)\n",i,totalLetterGrades[i][0],
+               totalLetterGrades[i][1], totalLetterGrades[i][2],totalLetterGrades[i][3],totalLetterGrades[i][04]);
     }
+
+    printf("Student Final Grades:\n");
+    double classAvg = ((double)totalSum)/((double)(numStudents*numGrades));
+    for (int i = 0; i < numStudents; i++) {
+        printf("%10s %-10s\t", studentList[i].firstName, studentList[i].lastName);
+        int sum = 0;
+        for (int j = 0; j < numGrades; j++) {
+            sum += studentList[i].grades[j];
+        }
+        double studentFinalGrade = ((double)sum)/(double)numGrades;
+        char letterGrade = ' ';
+        if (studentFinalGrade > classAvg) {
+            if (studentFinalGrade - classAvg < 15 && studentFinalGrade - classAvg > 5) {
+                letterGrade = 'B';
+            }
+            else if (studentFinalGrade - classAvg >= 15) {
+                letterGrade = 'A';
+            }
+            else if (studentFinalGrade - classAvg <= 5) {
+                letterGrade = 'C';
+            }
+        }
+        else {
+            if (classAvg - studentFinalGrade < 15 && classAvg - studentFinalGrade > 5) {
+                letterGrade = 'D';
+            }
+            else if (classAvg - studentFinalGrade >= 15) {
+                letterGrade = 'E';
+            }
+            else if (classAvg - studentFinalGrade <= 5) {
+                letterGrade = 'C';
+            }
+            else {
+                letterGrade = 'D';
+            }
+        }
+
+        printf("%.1f(%c)   \n", studentFinalGrade,letterGrade);
+    }
+    printf("Class Average Score = %.1f", classAvg);
+
+
 
 
     for (int i = 0; i < numStudents; i++) {
@@ -158,3 +202,4 @@ int main(int argc, char** argv) {
 
     return fclose(readFile) + fclose(writeFile);
 }
+
