@@ -16,6 +16,7 @@ int main(int argc, char** argv) {
     if (argc < 2) {
         exit(1);
     }
+    //printf("%s\n",argv[0]);
     //printf("%s\n",argv[1]);
     //printf("%s\n",argv[2]);
     readFile = fopen(argv[1],"r");
@@ -36,18 +37,13 @@ int main(int argc, char** argv) {
     int numReads = 0;
     char* newBuff;
     size_t newBuffSize = 50;
-    while (getline(&newBuff, &newBuffSize, readFile)) {//fgets(readFile, 255, buff)) {
+    while (getline(&newBuff, &newBuffSize, readFile)) {
 
         if (newBuff[0] != '\n') {
             char* token = strtok(newBuff, " ");
-            //studentList[numReads].firstName = calloc(sizeof(*token),sizeof(char));
-            //strcpy(studentList[numReads].firstName, token);
             studentList[numReads].firstName = strdup(token);
 
             token = strtok(NULL, " ");
-
-            //studentList[numReads].lastName = calloc(sizeof(*token),sizeof(char));
-            //strcpy(studentList[numReads].lastName, token);
             studentList[numReads].lastName = strdup(token);
 
             //printf("%s %s\n",studentList[numReads].firstName, studentList[numReads].lastName);
@@ -81,7 +77,7 @@ int main(int argc, char** argv) {
 
     //Averages Exams
     double avgExamScore[numGrades];
-    int totalSum = 0;
+    int totalSum = 0; // is used much later
     for (int i = 0; i < numGrades; i++) {
         int sum = 0;
         for (int j = 0; j < numStudents; j++) {
