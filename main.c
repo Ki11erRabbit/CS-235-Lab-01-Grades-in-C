@@ -40,38 +40,50 @@ int main(int argc, char** argv) {
         if (newBuff[0] != '\n') {
             char* token = strtok(newBuff, " ");
             studentList[numReads].firstName = calloc(sizeof(*token),sizeof(char));
-            strcpy(studentList[numReads].firstName, token);
-            printf("%s\n", studentList[numReads].firstName);
+            //strcpy(studentList[numReads].firstName, token);
+            studentList[numReads].firstName = strdup(token);
+
             token = strtok(NULL, " ");
 
             studentList[numReads].lastName = calloc(sizeof(*token),sizeof(char));
-            strcpy(studentList[numReads].lastName, token);
-            printf("%s\n", studentList[numReads].lastName);
+            //strcpy(studentList[numReads].lastName, token);
+            studentList[numReads].lastName = strdup(token);
+
+            //printf("%s %s\n",studentList[numReads].firstName, studentList[numReads].lastName);
+            //printf("%s %s\n",studentList[0].firstName, studentList[0].lastName);
+
             token = strtok(NULL, " ");
+
             int count = 0;
             while (token != NULL) {
-                studentList[numReads].grades[count] = atoi(token);
-                printf(" %s\n", token);
+                *studentList[numReads].grades[count] = atoi(token);
+                //printf(" %d\n", *studentList[numReads].grades[count]);
                 token = strtok(NULL, " ");
             }
             //printf("%s\n",newBuff);
-
-
+            numReads++;
         }
 
 
-        numReads++;
-        if (numReads == numStudents +1) break;
+
+        if (numReads == numStudents) break;
     }
 
+    for (int i = 0; i < numStudents; i++) {
+        printf("%s %s ", studentList[i].firstName, studentList[i].lastName);
+        for (int j = 0; j < numGrades; j++) {
+            printf("%d ", *studentList[i].grades[j]);
+        }
+        printf("\n");
+    }
 
 
     printf("Hello, World!\n");
 
     for (int i = 0; i < numStudents; i++) {
-        //free(studentList[i].firstName);
-        //free(studentList[i].lastName);
-        free(*studentList[i].grades);
+        free(studentList[i].firstName);
+        free(studentList[i].lastName);
+        //free(*studentList[i].grades);
     }
 
     return fclose(readFile) + fclose(writeFile);
