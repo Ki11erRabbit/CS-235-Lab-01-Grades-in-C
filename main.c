@@ -5,7 +5,7 @@
 typedef struct {
     char* firstName;
     char* lastName;
-    int* grades[];
+    int* grades;
 } studentData;
 
 int main(int argc, char** argv) {
@@ -30,7 +30,7 @@ int main(int argc, char** argv) {
 
     studentData studentList[numStudents];
     for (int i = 0; i < numStudents; i++) {
-        *studentList[i].grades = calloc(numGrades, sizeof(int));
+        studentList[i].grades = calloc(numGrades ,sizeof(int));
     }
     int numReads = 0;
     char* newBuff;
@@ -39,13 +39,13 @@ int main(int argc, char** argv) {
 
         if (newBuff[0] != '\n') {
             char* token = strtok(newBuff, " ");
-            studentList[numReads].firstName = calloc(sizeof(*token),sizeof(char));
+            //studentList[numReads].firstName = calloc(sizeof(*token),sizeof(char));
             //strcpy(studentList[numReads].firstName, token);
             studentList[numReads].firstName = strdup(token);
 
             token = strtok(NULL, " ");
 
-            studentList[numReads].lastName = calloc(sizeof(*token),sizeof(char));
+            //studentList[numReads].lastName = calloc(sizeof(*token),sizeof(char));
             //strcpy(studentList[numReads].lastName, token);
             studentList[numReads].lastName = strdup(token);
 
@@ -56,10 +56,12 @@ int main(int argc, char** argv) {
 
             int count = 0;
             while (token != NULL) {
-                *studentList[numReads].grades[count] = atoi(token);
-                //printf(" %d\n", *studentList[numReads].grades[count]);
+                studentList[numReads].grades[count] = atoi(token);
+                //printf(" %d\n", studentList[numReads].grades[count]);
                 token = strtok(NULL, " ");
+                count++;
             }
+
             //printf("%s\n",newBuff);
             numReads++;
         }
@@ -72,7 +74,7 @@ int main(int argc, char** argv) {
     for (int i = 0; i < numStudents; i++) {
         printf("%s %s ", studentList[i].firstName, studentList[i].lastName);
         for (int j = 0; j < numGrades; j++) {
-            printf("%d ", *studentList[i].grades[j]);
+            printf("%d ", studentList[i].grades[j]);
         }
         printf("\n");
     }
@@ -83,7 +85,7 @@ int main(int argc, char** argv) {
     for (int i = 0; i < numStudents; i++) {
         free(studentList[i].firstName);
         free(studentList[i].lastName);
-        //free(*studentList[i].grades);
+        free(studentList[i].grades);
     }
 
     return fclose(readFile) + fclose(writeFile);
