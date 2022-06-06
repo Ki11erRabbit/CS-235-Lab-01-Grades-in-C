@@ -95,7 +95,13 @@ int main(int argc, char** argv) {
     }
 
 
-    //Compares Student Grades to a ABCDE grade scale
+    //Compares Student Grades to a crappy ABCDE grade scale and keeps track of the number of ABCDE grades
+    int totalLetterGrades[numGrades][5];
+    for (int i = 0; i < numGrades; i++) {
+        for (int j = 0; j < 5; j ++) {
+            totalLetterGrades[i][j] = 0;
+        }
+    }
     printf("Student Exam Grades:\n");
     for (int i = 0; i < numStudents; i++) {
         printf("%10s %-10s\t", studentList[i].firstName, studentList[i].lastName);
@@ -104,33 +110,43 @@ int main(int argc, char** argv) {
             if (studentList[i].grades[j] > avgExamScore[j]) {
                 if (studentList[i].grades[j] - avgExamScore[j] < 15 && studentList[i].grades[j] - avgExamScore[j] > 5) {
                     letterGrade = 'B';
+                    totalLetterGrades[j][1] += 1;
                 }
                 else if (studentList[i].grades[j] - avgExamScore[j] >= 15) {
                     letterGrade = 'A';
+                    totalLetterGrades[j][0] += 1;
                 }
                 else if (studentList[i].grades[j] - avgExamScore[j] <= 5) {
-                    letterGrade = 'A';
+                    letterGrade = 'C';
+                    totalLetterGrades[j][2] += 1;
                 }
             }
             else {
                 if (avgExamScore[j] - studentList[i].grades[j] < 15 && avgExamScore[j] - studentList[i].grades[j] > 5) {
                     letterGrade = 'D';
+                    totalLetterGrades[j][3] += 1;
                 }
                 else if (avgExamScore[j] - studentList[i].grades[j] >= 15) {
                     letterGrade = 'E';
+                    totalLetterGrades[j][4] += 1;
                 }
                 else if (avgExamScore[j] - studentList[i].grades[j] <= 5) {
                     letterGrade = 'C';
+                    totalLetterGrades[j][2] += 1;
                 }
                 else {
                     letterGrade = 'D';
+                    totalLetterGrades[j][3] += 1;
                 }
             }
-
-
             printf("%3d(%c)   ", studentList[i].grades[j], letterGrade);
         }
         printf("\n");
+    }
+
+    printf("Exam Grades:\n");
+    for (int i = 0; i < numGrades; i++) {
+        printf("\tExam %2d   %2d(A)   %2d(B)   %2d(C)   %2d(D)   %2d(E)\n",i,totalLetterGrades[i][0], totalLetterGrades[i][1], totalLetterGrades[i][2],totalLetterGrades[i][3],totalLetterGrades[i][04]);
     }
 
 
