@@ -12,7 +12,7 @@ typedef struct {
 int main(int argc, char** argv) {
 
     FILE* readFile;
-    FILE* writeFile;
+    //FILE* writeFile;
     if (argc < 2) {
         exit(1);
     }
@@ -20,7 +20,7 @@ int main(int argc, char** argv) {
     //printf("%s\n",argv[1]);
     //printf("%s\n",argv[2]);
     readFile = fopen(argv[1],"r");
-    writeFile= fopen(argv[2],"w");
+    //writeFile= fopen(argv[2],"w");
 
     char buff[255];
     int numStudents, numGrades;
@@ -197,6 +197,6 @@ int main(int argc, char** argv) {
         free(studentList[i].grades);
     }
 
-    return fclose(readFile) + fclose(writeFile);
+    return fclose(readFile);// + fclose(writeFile);
 }
 
