@@ -15,8 +15,8 @@ int main(int argc, char** argv) {
     if (argc < 2) {
         exit(1);
     }
-    printf("%s\n",argv[1]);
-    printf("%s\n",argv[2]);
+    //printf("%s\n",argv[1]);
+    //printf("%s\n",argv[2]);
     readFile = fopen(argv[1],"r");
     writeFile= fopen(argv[2],"w");
 
@@ -26,7 +26,7 @@ int main(int argc, char** argv) {
     numStudents = atoi(buff);
     fscanf(readFile, "%s", buff);
     numGrades = atoi(buff);
-    printf("%d %d \n", numStudents, numGrades);
+    //printf("%d %d \n", numStudents, numGrades);
 
     studentData studentList[numStudents];
     for (int i = 0; i < numStudents; i++) {
@@ -71,16 +71,68 @@ int main(int argc, char** argv) {
         if (numReads == numStudents) break;
     }
 
+    printf("Student Scores:\n");
     for (int i = 0; i < numStudents; i++) {
-        printf("%s %s ", studentList[i].firstName, studentList[i].lastName);
+        printf("%10s %-10s\t", studentList[i].firstName, studentList[i].lastName);
         for (int j = 0; j < numGrades; j++) {
-            printf("%d ", studentList[i].grades[j]);
+            printf("%3d   ", studentList[i].grades[j]);
         }
         printf("\n");
     }
 
+    //Averages Exams
+    double avgExamScore[numGrades];
+    for (int i = 0; i < numGrades; i++) {
+        int sum = 0;
+        for (int j = 0; j < numStudents; j++) {
+            sum += studentList[j].grades[i];
+        }
+        avgExamScore[i] = ((double)sum)/((double)numStudents);
+    }
+    printf("Exam Averages:\n");
+    for (int i = 0; i < numGrades; i++) {
+        printf ("\tExam %d Average =\t%.1f\n",i, avgExamScore[i]);
+    }
 
-    printf("Hello, World!\n");
+
+    //Compares Student Grades to a ABCDE grade scale
+    printf("Student Exam Grades:\n");
+    for (int i = 0; i < numStudents; i++) {
+        printf("%10s %-10s\t", studentList[i].firstName, studentList[i].lastName);
+        for (int j = 0; j < numGrades; j++) {
+            char letterGrade = ' ';
+            if (studentList[i].grades[j] > avgExamScore[j]) {
+                if (studentList[i].grades[j] - avgExamScore[j] < 15 && studentList[i].grades[j] - avgExamScore[j] > 5) {
+                    letterGrade = 'B';
+                }
+                else if (studentList[i].grades[j] - avgExamScore[j] >= 15) {
+                    letterGrade = 'A';
+                }
+                else if (studentList[i].grades[j] - avgExamScore[j] <= 5) {
+                    letterGrade = 'A';
+                }
+            }
+            else {
+                if (avgExamScore[j] - studentList[i].grades[j] < 15 && avgExamScore[j] - studentList[i].grades[j] > 5) {
+                    letterGrade = 'D';
+                }
+                else if (avgExamScore[j] - studentList[i].grades[j] >= 15) {
+                    letterGrade = 'E';
+                }
+                else if (avgExamScore[j] - studentList[i].grades[j] <= 5) {
+                    letterGrade = 'C';
+                }
+                else {
+                    letterGrade = 'D';
+                }
+            }
+
+
+            printf("%3d(%c)   ", studentList[i].grades[j], letterGrade);
+        }
+        printf("\n");
+    }
+
 
     for (int i = 0; i < numStudents; i++) {
         free(studentList[i].firstName);
@@ -89,5 +141,4 @@ int main(int argc, char** argv) {
     }
 
     return fclose(readFile) + fclose(writeFile);
-    return 0;
 }
