@@ -34,11 +34,12 @@ int main(int argc, char** argv) {
     for (int i = 0; i < numStudents; i++) {
         studentList[i].grades = calloc(numGrades ,sizeof(int));
     }
+    //printf("calloced\n");
     int numReads = 0;
-    char* newBuff;
+    char* newBuff = NULL;
     size_t newBuffSize = 50;
     while (getline(&newBuff, &newBuffSize, readFile)) {
-
+        printf("Got line \n");
         if (newBuff[0] != '\n') {
             char* token = strtok(newBuff, " ");
             studentList[numReads].firstName = strdup(token);
