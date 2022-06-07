@@ -96,7 +96,7 @@ int main(int argc, char** argv) {
 
 
     //Compares Student Grades to a crappy ABCDE grade scale and keeps track of the number of ABCDE grades
-    int totalLetterGrades[numGrades][5];
+    int totalLetterGrades[numGrades][5];//Creates an VLA that keeps track of the amount of ABCDE grades for n amount of exams
     for (int i = 0; i < numGrades; i++) {
         for (int j = 0; j < 5; j ++) {
             totalLetterGrades[i][j] = 0;
