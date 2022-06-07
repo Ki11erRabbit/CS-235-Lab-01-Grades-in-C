@@ -63,9 +63,11 @@ int main(int argc, char** argv) {
             //printf("%s\n",newBuff);
             numReads++;
         }
+        free(newBuff);
+        newBuff = NULL;
         if (numReads == numStudents) break;
     }
-    free(newBuff);
+
 
     printf("Student Scores:\n");
     for (int i = 0; i < numStudents; i++) {
