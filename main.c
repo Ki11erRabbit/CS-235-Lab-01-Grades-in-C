@@ -12,15 +12,15 @@ typedef struct {
 int main(int argc, char** argv) {
 
     FILE* readFile;
-    //FILE* writeFile;
+    FILE* writeFile;
     if (argc < 2) {
         exit(1);
     }
-    //printf("%s\n",argv[0]);
-    //printf("%s\n",argv[1]);
-    //printf("%s\n",argv[2]);
+    //fprintf(writeFile,"%s\n",argv[0]);
+    //fprintf(writeFile,"%s\n",argv[1]);
+    //fprintf(writeFile,"%s\n",argv[2]);
     readFile = fopen(argv[1],"r");
-    //writeFile= fopen(argv[2],"w");
+    writeFile= fopen(argv[2],"w");
 
     char buff[255];
     int numStudents, numGrades;
@@ -28,18 +28,18 @@ int main(int argc, char** argv) {
     numStudents = atoi(buff);
     fscanf(readFile, "%s", buff);
     numGrades = atoi(buff);
-    //printf("%d %d \n", numStudents, numGrades);
+    //fprintf(writeFile,"%d %d \n", numStudents, numGrades);
 
     studentData studentList[numStudents];
     for (int i = 0; i < numStudents; i++) {
         studentList[i].grades = calloc(numGrades ,sizeof(int));
     }
-    //printf("calloced\n");
+    //fprintf(writeFile,"calloced\n");
     int numReads = 0;
     char* newBuff = NULL;
     size_t newBuffSize = 50;
     while (getline(&newBuff, &newBuffSize, readFile)) {
-        //printf("Got line \n");
+        //fprintf(writeFile,"Got line \n");
         if (newBuff[0] != '\n') {
             char* token = strtok(newBuff, " ");
             studentList[numReads].firstName = strdup(token);
@@ -47,20 +47,20 @@ int main(int argc, char** argv) {
             token = strtok(NULL, " ");
             studentList[numReads].lastName = strdup(token);
 
-            //printf("%s %s\n",studentList[numReads].firstName, studentList[numReads].lastName);
-            //printf("%s %s\n",studentList[0].firstName, studentList[0].lastName);
+            //fprintf(writeFile,"%s %s\n",studentList[numReads].firstName, studentList[numReads].lastName);
+            //fprintf(writeFile,"%s %s\n",studentList[0].firstName, studentList[0].lastName);
 
             token = strtok(NULL, " ");
 
             int count = 0;
             while (token != NULL) {
                 studentList[numReads].grades[count] = atoi(token);
-                //printf(" %d\n", studentList[numReads].grades[count]);
+                //fprintf(writeFile," %d\n", studentList[numReads].grades[count]);
                 token = strtok(NULL, " ");
                 count++;
             }
 
-            //printf("%s\n",newBuff);
+            //fprintf(writeFile,"%s\n",newBuff);
             numReads++;
         }
         free(newBuff);
@@ -69,13 +69,13 @@ int main(int argc, char** argv) {
     }
 
 
-    printf("Student Scores:\n");
+    fprintf(writeFile,"Student Scores:\n");
     for (int i = 0; i < numStudents; i++) {
-        printf("%10s %-10s\t", studentList[i].firstName, studentList[i].lastName);
+        fprintf(writeFile,"%10s %-10s\t", studentList[i].firstName, studentList[i].lastName);
         for (int j = 0; j < numGrades; j++) {
-            printf("%3d   ", studentList[i].grades[j]);
+            fprintf(writeFile,"%3d   ", studentList[i].grades[j]);
         }
-        printf("\n");
+        fprintf(writeFile,"\n");
     }
 
     //Averages Exams
@@ -89,9 +89,9 @@ int main(int argc, char** argv) {
         }
         avgExamScore[i] = ((double)sum)/((double)numStudents);
     }
-    printf("Exam Averages:\n");
+    fprintf(writeFile,"Exam Averages:\n");
     for (int i = 0; i < numGrades; i++) {
-        printf ("\tExam %d Average =\t%.1f\n",i, avgExamScore[i]);
+        fprintf(writeFile,"\tExam %d Average =\t%.1f\n",i, avgExamScore[i]);
     }
 
 
@@ -102,9 +102,9 @@ int main(int argc, char** argv) {
             totalLetterGrades[i][j] = 0;
         }
     }
-    printf("Student Exam Grades:\n");
+    fprintf(writeFile,"Student Exam Grades:\n");
     for (int i = 0; i < numStudents; i++) {
-        printf("%10s %-10s\t", studentList[i].firstName, studentList[i].lastName);
+        fprintf(writeFile,"%10s %-10s\t", studentList[i].firstName, studentList[i].lastName);
         for (int j = 0; j < numGrades; j++) {
             char letterGrade = ' ';
             if (studentList[i].grades[j] > avgExamScore[j]) {
@@ -139,21 +139,21 @@ int main(int argc, char** argv) {
                     totalLetterGrades[j][3] += 1;
                 }
             }
-            printf("%3d(%c)   ", studentList[i].grades[j], letterGrade);
+            fprintf(writeFile,"%3d(%c)   ", studentList[i].grades[j], letterGrade);
         }
-        printf("\n");
+        fprintf(writeFile,"\n");
     }
 
-    printf("Exam Grades:\n");
+    fprintf(writeFile,"Exam Grades:\n");
     for (int i = 0; i < numGrades; i++) {
-        printf("\tExam %2d   %2d(A)   %2d(B)   %2d(C)   %2d(D)   %2d(E)\n",i,totalLetterGrades[i][0],
+        fprintf(writeFile,"\tExam %2d   %2d(A)   %2d(B)   %2d(C)   %2d(D)   %2d(E)\n",i,totalLetterGrades[i][0],
                totalLetterGrades[i][1], totalLetterGrades[i][2],totalLetterGrades[i][3],totalLetterGrades[i][04]);
     }
 
-    printf("Student Final Grades:\n");
+    fprintf(writeFile,"Student Final Grades:\n");
     double classAvg = ((double)totalSum)/((double)(numStudents*numGrades));
     for (int i = 0; i < numStudents; i++) {
-        printf("%10s %-10s\t", studentList[i].firstName, studentList[i].lastName);
+        fprintf(writeFile,"%10s %-10s\t", studentList[i].firstName, studentList[i].lastName);
         int sum = 0;
         for (int j = 0; j < numGrades; j++) {
             sum += studentList[i].grades[j];
@@ -186,9 +186,9 @@ int main(int argc, char** argv) {
             }
         }
 
-        printf("%.1f(%c)   \n", studentFinalGrade,letterGrade);
+        fprintf(writeFile,"%.1f(%c)   \n", studentFinalGrade,letterGrade);
     }
-    printf("Class Average Score = %.1f", classAvg);
+    fprintf(writeFile,"Class Average Score = %.1f", classAvg);
 
 
 
